@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+
+var launch = require('chrome-diagnostics-launch');
+
+var options = parse(process.argv.slice(2));
+if (!options.url) {
+  usage();
+}
+
+var runtime = launch(options.url, options);
+
+function parse(argv) {
+  return argv.reduce(function(options, value, index, argv) {
+    if (/^-p|--port/.test(value)) {
+      options.port = Number.parseInt(argv.slice(index + 1)[0]);
+      return options;
+    }
+
+    options.url = value;
+    return options;
+  }, {
+    port: 9222,
+  });
+}
+
+function usage() {
+  process.stdout.write([
+    'Usage: coda-chrome [-p|--port <port>] <url>',
+    '',
+  ].join('\n'));
+
+  process.exit(0);
+}
+
+function fail(error) {
+  process.stderr.write(error);
+  process.exit(1);
+}
