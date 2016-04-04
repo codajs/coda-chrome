@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+
+var chrome = require('..');
+
+var argv = process.argv.slice(2);
+if (/(stable|beta|unstable|canary)/.test(argv[0])) {
+  var version = argv.shift();
+}
+
+chrome.spawn(version, argv, {
+  stdio: 'inherit',
+});
